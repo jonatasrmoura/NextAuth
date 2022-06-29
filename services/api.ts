@@ -5,6 +5,9 @@ import { signOut } from "../contexts/AuthContext";
 import { AuthTokenError } from "./errors/AuthTokenError";
 
 type Context = undefined | GetServerSidePropsContext;
+type ApiErrorProps = {
+  code: string
+};
 
 let isRefreshing = false;
 let failedRequestQueue: any[] = [];
@@ -21,7 +24,7 @@ export function setupApiClient(ctx: Context = undefined) {
   
   api.interceptors.response.use((response) => {
     return response;
-  }, (error: AxiosError) => {
+  }, (error: AxiosError<ApiErrorProps>) => {
     if (error.response?.status === 401) {
       if (error.response.data?.code === 'token.expired') {
         // renovar o token
