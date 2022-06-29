@@ -9,10 +9,10 @@ export default function Dashboard() {
       <h1>Dashboard</h1>
       <h2>E-mail: {user?.email}</h2>
       <h2>Permissões: {user?.permissions.map(per => (
-        <><span>{per}</span></>
+        <span key={per}>{per}</span>
       ))}</h2>
       <h2>Cargo: {user?.roles.map(role => (
-        <><span>{role}</span></>
+        <span key={role}>{role}</span>
       ))}</h2>
     </>
   );
