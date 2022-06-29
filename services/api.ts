@@ -1,11 +1,15 @@
 import axios, { AxiosError } from "axios";
+import { GetServerSidePropsContext } from "next";
 import { parseCookies, setCookie } from 'nookies';
 import { signOut } from "../contexts/AuthContext";
+import { AuthTokenError } from "./errors/AuthTokenError";
+
+type Context = undefined | GetServerSidePropsContext;
 
 let isRefreshing = false;
 let failedRequestQueue: any[] = [];
 
-export function setupApiClient(ctx = undefined) {
+export function setupApiClient(ctx: Context = undefined) {
   let cookies = parseCookies(ctx);
 
   const api = axios.create({
@@ -83,6 +87,8 @@ export function setupApiClient(ctx = undefined) {
         // deslogar o usuário
         if(process.browser) {
           signOut();
+        } else {
+          return Promise.reject(new AuthTokenError());
         }
       }
     }
